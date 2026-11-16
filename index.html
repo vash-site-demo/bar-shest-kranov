@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#14231e">
+  <meta name="description" content="Демонстрационный сайт небольшого бара: шесть сортов пива, афиша живой музыки и удобное обновление контента с телефона.">
+  <title>Шесть кранов — небольшой бар с живой музыкой</title>
+  <link rel="preload" href="./assets/fonts/manrope-cyr.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/piazzolla-cyr.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face{font-family:Manrope;src:url('./assets/fonts/manrope-lat.woff2') format('woff2');font-style:normal;font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+    @font-face{font-family:Manrope;src:url('./assets/fonts/manrope-cyr.woff2') format('woff2');font-style:normal;font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+    @font-face{font-family:Piazzolla;src:url('./assets/fonts/piazzolla-lat.woff2') format('woff2');font-style:normal;font-weight:200 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+    @font-face{font-family:Piazzolla;src:url('./assets/fonts/piazzolla-cyr.woff2') format('woff2');font-style:normal;font-weight:200 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+    :root{--ink:#f4f0e5;--muted:#b8beb3;--bg:#14231e;--bg-deep:#0e1a16;--paper:#ece7db;--paper-text:#1b2822;--amber:#e6b25f;--line:rgba(244,240,229,.16);--serif:Piazzolla,Georgia,serif;--sans:Manrope,Arial,sans-serif;--radius:22px;--pad:clamp(20px,4vw,64px);--max:1320px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scroll-padding-top:88px;overflow-x:hidden}
+    body{font-family:var(--sans);font-size:16px;line-height:1.6;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    body.modal-open{overflow:hidden}
+    button,input,textarea,select{font:inherit}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    img{display:block;width:100%;height:100%;object-fit:cover}
+    svg{display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+    :focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+    .shell{width:min(100%,var(--max));margin-inline:auto;padding-inline:var(--pad)}
+    .eyebrow{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--amber)}
+    .eyebrow::before{content:'';width:26px;height:1px;background:currentColor;flex:none}
+    .button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid transparent;border-radius:100px;padding:13px 24px;font-size:14px;font-weight:700;transition:background .25s,color .25s,transform .25s,border-color .25s}
+    .button svg{width:19px;height:19px}
+    .button:hover{transform:translateY(-2px)}
+    .button--amber{background:var(--amber);color:#18221c}
+    .button--amber:hover{background:#f2c679}
+    .button--outline{border-color:var(--line);background:transparent;color:var(--ink)}
+    .button--outline:hover{border-color:var(--amber);color:var(--amber)}
+    .button--dark{background:var(--bg);color:var(--ink)}
+    .icon-button{width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:transparent;color:inherit;flex:none}
+    .icon-button svg{width:20px;height:20px}
+    .site-header{position:absolute;inset:0 0 auto;z-index:10;border-bottom:1px solid var(--line)}
+    .header-inner{height:88px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;min-height:48px}
+    .brand-mark{width:39px;height:44px;color:var(--amber)}
+    .brand-name{display:block;font-family:var(--serif);font-size:23px;line-height:1.05;letter-spacing:-.02em}
+    .brand-note{display:block;margin-top:5px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .desktop-nav{display:flex;align-items:center;gap:34px;font-size:13px;font-weight:600}
+    .desktop-nav a{min-height:44px;display:flex;align-items:center;transition:color .2s}
+    .desktop-nav a:hover{color:var(--amber)}
+    .header-book{min-height:44px;padding:10px 20px}
+    .menu-toggle{display:none}
+    .mobile-menu{display:none}
+    .hero{position:relative;min-height:800px;padding-top:160px;padding-bottom:70px;display:flex;align-items:center;isolation:isolate}
+    .hero::before{content:'';position:absolute;z-index:-1;width:580px;height:580px;top:-130px;left:-200px;background:radial-gradient(circle,rgba(230,178,95,.11),transparent 69%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,.85fr);align-items:center;gap:clamp(44px,7vw,110px)}
+    .hero-copy{position:relative;z-index:2;padding-bottom:24px}
+    .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(60px,6.3vw,100px);line-height:.96;letter-spacing:-.05em;margin:28px 0 28px;max-width:770px;text-wrap:balance}
+    .hero h1 em{display:block;font-weight:400;color:var(--amber)}
+    .hero-lead{max-width:490px;color:var(--muted);font-size:17px;line-height:1.75}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+    .hero-footnote{display:flex;align-items:center;gap:12px;margin-top:35px;font-size:12px;color:var(--muted)}
+    .pulse{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 5px rgba(230,178,95,.09)}
+    .hero-visual{position:relative;height:580px;margin-right:12px}
+    .hero-photo{position:absolute;inset:0 0 30px 20px;border-radius:180px 180px 20px 20px;overflow:hidden;background:#28382f}
+    .hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(7,15,11,.65))}
+    .hero-photo img{filter:saturate(.78) contrast(1.04)}
+    .hero-stamp{position:absolute;right:-22px;top:80px;width:115px;height:115px;border-radius:50%;display:grid;place-items:center;background:var(--amber);color:var(--bg);transform:rotate(9deg);z-index:2;text-align:center;font-size:10px;font-weight:800;line-height:1.45;letter-spacing:.1em;text-transform:uppercase;border:7px solid var(--bg)}
+    .hero-stamp strong{font-family:var(--serif);font-size:39px;font-weight:500;display:block;line-height:.8;letter-spacing:0}
+    .hero-caption{position:absolute;left:-14px;bottom:0;z-index:2;width:250px;padding:20px 24px;background:var(--paper);color:var(--paper-text);border-radius:4px 4px 22px 4px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
+    .hero-caption span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#677268;margin-bottom:5px}
+    .hero-caption strong{font-family:var(--serif);font-size:23px;font-weight:500;line-height:1.25}
+    .marquee{border-block:1px solid var(--line);overflow:hidden;background:var(--bg-deep)}
+    .marquee-track{width:100%;max-width:100vw;min-width:0;min-height:68px;display:flex;align-items:center;justify-content:center;gap:36px;padding:16px var(--pad);white-space:nowrap;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+    .marquee-track i{width:4px;height:4px;border-radius:50%;background:var(--amber);flex:none}
+    .section{padding-block:clamp(80px,10vw,140px)}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:48px}
+    .section h2{font-family:var(--serif);font-size:clamp(43px,5vw,72px);font-weight:400;line-height:1.05;letter-spacing:-.04em;margin-top:19px;text-wrap:balance}
+    .section-intro{max-width:400px;color:var(--muted);font-size:14px;line-height:1.8}
+    .beer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}
+    .beer-card{position:relative;display:grid;grid-template-columns:52px 1fr auto;gap:20px;padding:28px 24px 30px 0;border-bottom:1px solid var(--line);min-width:0}
+    .beer-card:nth-child(odd){padding-right:38px;border-right:1px solid var(--line)}
+    .beer-card:nth-child(even){padding-left:38px}
+    .beer-number{font-family:var(--serif);font-size:24px;color:var(--amber);opacity:.75;line-height:1.25}
+    .beer-card h3{font-family:var(--serif);font-size:27px;font-weight:500;line-height:1.2;overflow-wrap:anywhere}
+    .beer-style{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:7px}
+    .beer-description{grid-column:2/4;font-size:13px;color:var(--muted);line-height:1.7;margin-top:-5px;overflow-wrap:anywhere}
+    .beer-meta{display:flex;gap:14px;grid-column:2/4;font-size:11px;color:var(--ink)}
+    .beer-meta span+span{position:relative;padding-left:14px}
+    .beer-meta span+span::before{content:'';position:absolute;left:0;top:50%;width:3px;height:3px;border-radius:50%;background:var(--muted)}
+    .beer-price{font-size:15px;font-weight:700;white-space:nowrap;color:var(--amber)}
+    .menu-bottom{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:32px;color:var(--muted);font-size:12px}
+    .text-button{display:inline-flex;align-items:center;gap:9px;min-height:44px;border:0;background:none;color:var(--amber);font-size:13px;font-weight:700;padding:0}
+    .text-button svg{width:17px;height:17px;transition:transform .2s}
+    .text-button:hover svg{transform:translateX(4px)}
+    .music-section{background:var(--paper);color:var(--paper-text)}
+    .music-section .eyebrow{color:#8b5e25}
+    .music-section .section-intro{color:#5f675f}
+    .music-layout{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(40px,7vw,90px);align-items:start}
+    .music-photo{position:relative;height:620px;border-radius:220px 220px 12px 12px;overflow:hidden;background:#bbc0ad}
+    .music-photo img{filter:saturate(.7)}
+    .music-photo-note{position:absolute;inset:auto 18px 18px;background:rgba(20,35,30,.91);backdrop-filter:blur(10px);color:var(--ink);padding:20px 24px;border-radius:10px;font-size:12px}
+    .music-photo-note strong{display:block;font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:3px}
+    .event-list{border-top:1px solid rgba(27,40,34,.2)}
+    .event-card{display:grid;grid-template-columns:80px 1fr;gap:24px;padding:30px 0;border-bottom:1px solid rgba(27,40,34,.2)}
+    .event-date{border-right:1px solid rgba(27,40,34,.2);padding-right:20px}
+    .event-day{display:block;font-family:var(--serif);font-size:47px;line-height:1}
+    .event-month{display:block;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-top:8px;color:#687067}
+    .event-top{display:flex;align-items:start;justify-content:space-between;gap:15px}
+    .event-card h3{font-family:var(--serif);font-size:29px;font-weight:500;line-height:1.2;overflow-wrap:anywhere}
+    .event-time{font-size:12px;font-weight:700;white-space:nowrap;padding-top:6px;color:#7c5526}
+    .event-artist{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-top:7px;color:#7c5526;overflow-wrap:anywhere}
+    .event-description{font-size:13px;color:#616a60;margin:12px 0 14px;line-height:1.7;overflow-wrap:anywhere}
+    .event-card .text-button{color:#795323;font-size:12px;min-height:40px}
+    .visit{padding-block:clamp(90px,10vw,140px);position:relative;overflow:hidden}
+    .visit::after{content:'6';position:absolute;right:-.04em;bottom:-.4em;font-family:var(--serif);font-size:520px;line-height:1;color:rgba(255,255,255,.018);pointer-events:none}
+    .visit-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:70px;align-items:end}
+    .visit h2{font-family:var(--serif);font-size:clamp(46px,6vw,83px);font-weight:400;line-height:1.04;letter-spacing:-.04em;max-width:780px}
+    .visit h2 em{color:var(--amber);font-weight:400}
+    .visit-copy{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:26px}
+    .demo-note{font-size:11px;color:#8e9b90;margin-top:20px}
+    .site-footer{border-top:1px solid var(--line);padding-block:30px;background:var(--bg-deep)}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;color:var(--muted);font-size:11px}
+    .footer-brand{font-family:var(--serif);font-size:20px;color:var(--ink)}
+    .owner-launcher{position:fixed;z-index:30;right:20px;bottom:20px;min-height:48px;display:flex;align-items:center;gap:9px;padding:11px 17px;border:1px solid rgba(255,255,255,.18);border-radius:100px;background:#263a31;color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:12px;font-weight:700}
+    .owner-launcher svg{width:18px;height:18px;color:var(--amber)}
+    dialog{color:var(--paper-text);background:var(--paper);border:0;padding:0;border-radius:var(--radius);width:min(680px,calc(100% - 32px));max-height:calc(100dvh - 40px);box-shadow:0 28px 90px rgba(0,0,0,.45)}
+    dialog::backdrop{background:rgba(5,13,10,.78);backdrop-filter:blur(6px)}
+    dialog[open]{animation:dialog-in .25s ease-out}
+    @keyframes dialog-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .dialog-head{position:sticky;top:0;z-index:4;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:26px 30px 22px;background:var(--paper);border-bottom:1px solid rgba(27,40,34,.13)}
+    .dialog-head h2{font-family:var(--serif);font-size:34px;font-weight:500;line-height:1.15}
+    .dialog-head p{font-size:12px;color:#697168;margin-top:6px}
+    .dialog-head .icon-button{border-color:rgba(27,40,34,.2)}
+    .dialog-body{padding:26px 30px 30px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .field{display:flex;flex-direction:column;gap:7px;min-width:0}
+    .field--full{grid-column:1/-1}
+    .field label,.field-label{font-size:11px;font-weight:700;color:#48554b}
+    .field input,.field textarea,.field select{width:100%;min-height:48px;border:1px solid #c5c9be;border-radius:10px;background:#faf8f1;color:#17251e;padding:11px 13px;outline:none;font-size:14px}
+    .field textarea{min-height:82px;resize:vertical}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:#805c29;box-shadow:0 0 0 3px rgba(128,92,41,.12)}
+    .field input[aria-invalid=true]{border-color:#a63c32}
+    .field-error{color:#9b3129;font-size:11px;min-height:0}
+    .form-note{font-size:11px;color:#677168;line-height:1.65;margin-top:20px}
+    .dialog-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:24px}
+    .booking-success{text-align:center;padding:16px 0 6px}
+    .success-icon{display:grid;place-items:center;width:62px;height:62px;margin:0 auto 20px;border-radius:50%;background:#dce7d9;color:#2c5c3d}
+    .success-icon svg{width:30px;height:30px}
+    .booking-success h3{font-family:var(--serif);font-size:32px;font-weight:500;line-height:1.2}
+    .booking-success p{font-size:13px;color:#5d695f;line-height:1.7;margin:13px auto;max-width:450px}
+    .booking-summary{text-align:left;white-space:pre-wrap;background:#e1ded2;padding:18px;border-radius:12px;font-size:13px;margin:20px 0;overflow-wrap:anywhere}
+    .booking-success .dialog-actions{justify-content:center}
+    .editor-dialog{width:min(860px,calc(100% - 24px))}
+    .editor-info{padding:14px 16px;background:#e3ded0;border-radius:10px;font-size:12px;line-height:1.65;margin-bottom:25px;color:#4d5a50}
+    .editor-section{margin-top:28px}
+    .editor-section:first-child{margin-top:0}
+    .editor-section>h3{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:15px}
+    .editor-section>h3 span{font-family:var(--sans);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#76633f}
+    .editor-beer{padding:20px 0;border-top:1px solid #cdd0c5}
+    .editor-beer-title{font-size:12px;font-weight:800;margin-bottom:12px;color:#6c5735}
+    .editor-beer .form-grid{grid-template-columns:1.4fr .8fr .6fr .5fr .7fr;gap:10px}
+    .editor-beer .field--description{grid-column:1/-1}
+    .editor-event{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 0;border-top:1px solid #cdd0c5}
+    .editor-event .field--full{grid-column:1/-1}
+    .editor-status{font-size:12px;color:#516b50;margin-right:auto;min-height:20px}
+    .toast{position:fixed;left:50%;bottom:25px;z-index:100;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--paper);color:var(--paper-text);padding:13px 20px;border-radius:100px;box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:13px;font-weight:700;transition:.25s;max-width:calc(100% - 32px);text-align:center}
+    .toast.visible{opacity:1;transform:translate(-50%,0)}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.is-visible{opacity:1;transform:none}
+    @media(max-width:1050px){
+      .desktop-nav{gap:20px}.hero-grid{grid-template-columns:1.05fr .95fr;gap:40px}.hero-visual{height:510px}.hero h1{font-size:clamp(58px,7vw,78px)}.hero-stamp{right:-10px}.music-layout{gap:45px}.music-photo{height:570px}.editor-beer .form-grid{grid-template-columns:1.3fr 1fr .7fr}.editor-beer .field--description{grid-column:1/-1}
+    }
+    @media(max-width:800px){
+      .desktop-nav{display:none}.menu-toggle{display:grid}.mobile-menu{position:absolute;left:0;right:0;top:88px;background:var(--bg-deep);padding:18px var(--pad) 24px;border-bottom:1px solid var(--line)}.mobile-menu.open{display:grid}.mobile-menu a,.mobile-menu button{min-height:48px;display:flex;align-items:center;border:0;background:none;color:var(--ink);text-align:left;font-weight:600}.hero{padding-top:140px}.hero-grid{grid-template-columns:1fr}.hero-copy{max-width:650px}.hero-visual{height:560px;width:min(100%,520px);margin:10px auto 0}.hero-photo{left:0}.hero-caption{left:12px}.hero-stamp{right:0}.section-head{align-items:start;flex-direction:column}.beer-card:nth-child(odd){padding-right:24px}.beer-card:nth-child(even){padding-left:24px}.music-layout{grid-template-columns:1fr}.music-photo{height:480px;width:min(100%,530px)}.music-photo-note{max-width:390px}.visit-grid{grid-template-columns:1fr;gap:32px}.visit-copy{max-width:540px}.footer-inner{flex-wrap:wrap}.editor-beer .form-grid{grid-template-columns:1fr 1fr}.editor-beer .field--name{grid-column:1/-1}
+    }
+    @media(max-width:560px){
+      :root{--radius:18px}.header-inner{height:76px}.brand-note{display:none}.brand-name{font-size:21px}.brand-mark{width:32px;height:38px}.site-header{position:absolute}.mobile-menu{top:76px}.hero{min-height:auto;padding-top:121px;padding-bottom:55px}.hero h1{font-size:clamp(52px,15vw,72px);margin:23px 0}.hero-lead{font-size:15px}.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .button{width:100%}.hero-footnote{margin-top:24px;font-size:11px}.hero-visual{height:420px;margin-top:15px}.hero-photo{inset:0 0 20px;border-radius:140px 140px 16px 16px}.hero-stamp{width:94px;height:94px;top:46px;font-size:8px;border-width:5px}.hero-stamp strong{font-size:31px}.hero-caption{width:210px;padding:15px 18px}.hero-caption strong{font-size:20px}.marquee-track{justify-content:center;overflow:hidden;gap:18px;font-size:9px;min-height:58px}.marquee-track span:nth-of-type(n+3),.marquee-track i:nth-of-type(n+2){display:none}.section{padding-block:78px}.section-head{margin-bottom:30px;gap:18px}.section h2{font-size:43px}.beer-grid{grid-template-columns:1fr}.beer-card,.beer-card:nth-child(odd),.beer-card:nth-child(even){grid-template-columns:38px 1fr auto;padding:24px 0;border-right:0;gap:13px}.beer-card h3{font-size:25px}.beer-price{font-size:13px}.beer-description{font-size:12px}.menu-bottom{align-items:flex-start;flex-direction:column;gap:12px}.music-photo{height:400px}.event-card{grid-template-columns:58px 1fr;gap:17px}.event-date{padding-right:13px}.event-day{font-size:38px}.event-card h3{font-size:25px}.event-top{flex-direction:column;gap:2px}.event-time{padding-top:0}.visit h2{font-size:45px}.footer-inner{display:grid;gap:9px}.owner-launcher{right:14px;bottom:14px;padding:11px 14px}.owner-launcher span{display:none}dialog{width:calc(100% - 20px);max-height:calc(100dvh - 20px)}.dialog-head{padding:21px 20px 18px}.dialog-head h2{font-size:29px}.dialog-body{padding:22px 20px 24px}.form-grid,.editor-event{grid-template-columns:1fr}.field--full,.editor-event .field--full{grid-column:auto}.editor-beer .form-grid{grid-template-columns:1fr 1fr}.editor-beer .field--name,.editor-beer .field--description{grid-column:1/-1}.dialog-actions .button{flex:1}.editor-status{width:100%;margin-bottom:6px}.toast{bottom:75px;width:max-content}.demo-note{padding-right:15px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute"><defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M13.5 6.5 17.5 10.5M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  </defs></svg>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="Шесть кранов — на главную">
+        <svg class="brand-mark" viewBox="0 0 42 48" aria-hidden="true"><path d="M12 4h18l-2 25a7 7 0 0 1-14 0L12 4Z"/><path d="M21 36v8m-8 0h16M14 13h14M17 4V1m8 3V1"/></svg>
+        <span><span class="brand-name">Шесть кранов</span><span class="brand-note">Бар · Пиво · Музыка</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Основная навигация">
+        <a href="#menu">Пиво</a><a href="#music">Афиша</a><a href="#visit">Контакты</a>
+        <button class="button button--outline header-book" type="button" data-booking>Забронировать стол</button>
+      </nav>
+      <button class="icon-button menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu"><svg><use href="#i-menu"/></svg></button>
+    </div>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Мобильная навигация">
+      <a href="#menu">Пиво</a><a href="#music">Афиша</a><a href="#visit">Контакты</a><button type="button" data-booking>Забронировать стол</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Небольшой бар · Большой вечер</p>
+          <h1 id="hero-title">Ваш вечер.<em>Шесть кранов.</em></h1>
+          <p class="hero-lead">Пиво, которое хочется попробовать, и музыка, которую хочется слушать. Выбирайте свой сорт и приходите за новым любимым местом.</p>
+          <div class="hero-actions">
+            <a class="button button--amber" href="#menu">Что сегодня на кранах <svg><use href="#i-arrow"/></svg></a>
+            <a class="button button--outline" href="#music">Живая музыка</a>
+          </div>
+          <p class="hero-footnote"><span class="pulse" aria-hidden="true"></span>Меню и афиша всегда под рукой</p>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-photo"><img src="./assets/hero.jpg" alt="Уютная барная стойка с кранами и тёплым светом" fetchpriority="high"></div>
+          <div class="hero-stamp" aria-hidden="true"><span><strong>6</strong>сортов<br>на кранах</span></div>
+          <div class="hero-caption"><span>Здесь начинается вечер</span><strong>Свой бокал.<br>Свои люди.</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-label="Особенности бара"><div class="marquee-track"><span>Шесть сортов</span><i></i><span>Живые выступления</span><i></i><span>Душевная атмосфера</span><i></i><span>Ваш новый любимый бар</span></div></div>
+
+    <section class="section shell" id="menu" aria-labelledby="menu-title">
+      <div class="section-head reveal">
+        <div><p class="eyebrow">На кранах</p><h2 id="menu-title">Найдите свой вкус</h2></div>
+        <p class="section-intro">От лёгкого лагера до плотного стаута. Подскажем, с чего начать, и нальём на пробу — если этот сорт сегодня есть.</p>
+      </div>
+      <div class="beer-grid" id="beer-list" aria-live="polite"></div>
+      <div class="menu-bottom"><span>Цены в демо указаны за бокал 0,4 л</span><button class="text-button" type="button" data-booking>Выбрать стол для дегустации <svg><use href="#i-arrow"/></svg></button></div>
+    </section>
+
+    <section class="music-section section" id="music" aria-labelledby="music-title">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div><p class="eyebrow">Не фоном, а вживую</p><h2 id="music-title">Музыка в ближайшие вечера</h2></div>
+          <p class="section-intro">Акустика, джаз и свои любимые песни. Выберите вечер — мы подготовим демо-заявку на стол.</p>
+        </div>
+        <div class="music-layout">
+          <div class="music-photo reveal"><img src="./assets/concert.jpg" alt="Музыкант с гитарой выступает перед гостями" loading="lazy"><div class="music-photo-note"><strong>Близко к музыке</strong>Небольшой зал, живой звук и никакой суеты.</div></div>
+          <div class="event-list" id="event-list" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="visit shell" id="visit" aria-labelledby="visit-title">
+      <div class="visit-grid reveal">
+        <h2 id="visit-title">Загляните на один бокал. <em>Останьтесь на весь вечер.</em></h2>
+        <div><p class="visit-copy">Расскажите, когда придёте и сколько вас будет. На рабочем сайте заявка сразу попадёт владельцу, а здесь её можно скопировать.</p><button class="button button--amber" type="button" data-booking>Забронировать стол <svg><use href="#i-arrow"/></svg></button><p class="demo-note">Демо-версия: адрес, телефон и режим работы добавятся перед запуском.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand">Шесть кранов</span><span>Демонстрационный сайт небольшого бара</span><a href="#top">Наверх ↑</a></div></footer>
+
+  <button class="owner-launcher" id="open-editor" type="button" aria-label="Обновить меню и афишу"><svg><use href="#i-edit"/></svg><span>Обновить контент</span></button>
+
+  <dialog id="booking-dialog" aria-labelledby="booking-title">
+    <div class="dialog-head"><div><h2 id="booking-title">Стол для вашего вечера</h2><p>Заполните детали — это займёт меньше минуты.</p></div><button class="icon-button" type="button" data-close-dialog aria-label="Закрыть окно"><svg><use href="#i-close"/></svg></button></div>
+    <div class="dialog-body">
+      <form id="booking-form" novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="booking-name">Ваше имя *</label><input id="booking-name" name="name" autocomplete="name" required placeholder="Как к вам обращаться"><span class="field-error" data-error="name"></span></div>
+          <div class="field"><label for="booking-phone">Телефон *</label><input id="booking-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7 999 123-45-67"><span class="field-error" data-error="phone"></span></div>
+          <div class="field"><label for="booking-date">Дата *</label><input id="booking-date" name="date" type="date" required><span class="field-error" data-error="date"></span></div>
+          <div class="field"><label for="booking-guests">Гостей</label><select id="booking-guests" name="guests"><option value="1">1 гость</option><option value="2" selected>2 гостя</option><option value="3">3 гостя</option><option value="4">4 гостя</option><option value="5">5 гостей</option><option value="6+">6 и более</option></select></div>
+          <div class="field field--full"><label for="booking-event">Повод</label><select id="booking-event" name="event"><option value="Просто вечер в баре">Просто вечер в баре</option></select></div>
+          <div class="field field--full"><label for="booking-comment">Комментарий</label><textarea id="booking-comment" name="comment" placeholder="Например, стол поближе к сцене"></textarea></div>
+        </div>
+        <p class="form-note">Это демонстрационная форма: заявка не отправляется на сервер. На рабочем сайте её можно направить в WhatsApp или Telegram владельца.</p>
+        <div class="dialog-actions"><button class="button button--dark" type="submit">Подготовить заявку <svg><use href="#i-arrow"/></svg></button></div>
+      </form>
+      <div class="booking-success" id="booking-success" hidden><div class="success-icon"><svg><use href="#i-check"/></svg></div><h3>Заявка подготовлена</h3><p>Проверьте детали и скопируйте текст. В демо ничего не отправляется автоматически.</p><div class="booking-summary" id="booking-summary"></div><div class="dialog-actions"><button class="button button--dark" id="copy-booking" type="button"><svg><use href="#i-copy"/></svg>Скопировать заявку</button><button class="button" id="edit-booking" type="button">Изменить</button></div></div>
+    </div>
+  </dialog>
+
+  <dialog class="editor-dialog" id="editor-dialog" aria-labelledby="editor-title">
+    <div class="dialog-head"><div><h2 id="editor-title">Обновление с телефона</h2><p>Меню и афиша — в одном простом редакторе.</p></div><button class="icon-button" type="button" data-close-dialog aria-label="Закрыть редактор"><svg><use href="#i-close"/></svg></button></div>
+    <div class="dialog-body">
+      <p class="editor-info">Изменения в этом демо сохраняются только на этом устройстве. Для настоящего бара подключим CMS, чтобы владелец обновлял общий сайт с телефона без программиста.</p>
+      <form id="editor-form">
+        <section class="editor-section" aria-labelledby="editor-beers-title"><h3 id="editor-beers-title">Пиво <span>6 сортов</span></h3><div id="beer-editor"></div></section>
+        <section class="editor-section" aria-labelledby="editor-events-title"><h3 id="editor-events-title">Афиша <span>3 события</span></h3><div id="event-editor"></div></section>
+        <div class="dialog-actions"><p class="editor-status" id="editor-status" role="status"></p><button class="button" id="reset-content" type="button">Восстановить демо</button><button class="button button--dark" type="submit">Сохранить изменения</button></div>
+      </form>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "bar-six-taps-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Демонстрационный одностраничный сайт бара с редактируемым меню и афишей",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "start": "vite --host 0.0.0.0",
+    "build": "vite build --base=./",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "vite": "^6.0.0"
+  }
+}
